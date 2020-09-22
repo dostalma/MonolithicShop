@@ -1,0 +1,90 @@
+package cz.dostalma.monolithicshop.controller;
+
+import cz.dostalma.monolithicshop.model.Product;
+import org.apache.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@RestController
+public class ProductApiController {
+
+    private Logger logger = Logger.getLogger(ProductController.class);
+
+    /**
+     * GER request to return a list of products
+     *
+     * @return List of products
+     */
+    @RequestMapping(value = "/api/products", method = RequestMethod.GET)
+    public List<Product> findAll() {
+        logger.info("Request to retrieve all products");
+
+        // DEBUG test products -- to be replaced
+        List<Product> list = new ArrayList<>();
+        Product product = new Product.ProductBuilder()
+                .withId(1l)
+                .withName("Apple")
+                .withPrice(3.99)
+                .build();
+        list.add(product);
+
+        return list;
+    }
+
+    /**
+     * GET Request with an ID parameter returns a single product if existing
+     *
+     * @param id of the product to retrieve
+     * @return Found product if existing
+     */
+    @GetMapping(value = "/{id}")
+    public Product findById(@PathVariable("id") Long id) {
+        logger.info("Request to retrieve a product with id: " + id);
+        Product product = new Product();
+
+        return product;
+    }
+
+    /**
+     * POST Request to create a product
+     *
+     * @param product payload of a Product object
+     * @return List of products
+     */
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Long create(@RequestBody Product product) {
+        logger.info("Request to create an product: " + product.toString());
+
+        return 1l;
+    }
+
+
+    /**
+     * PUT Request to update a product
+     *
+     * @param id of Product to be updated
+     * @param product payload of a Product object
+     */
+    @PutMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void update(@PathVariable("id") Long id, @RequestBody Product product) {
+        logger.info("Request to update an product: " + product.toString() + "with id: " + id);
+
+    }
+
+    /**
+     * DELETE Request to delete an product
+     *
+     * @param id of product to delete
+     */
+    @DeleteMapping(value = "/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable("id") Long id) {
+        logger.info("Request to delete a product with id: " + id);
+
+    }
+}
