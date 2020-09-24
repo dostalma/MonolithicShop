@@ -1,7 +1,9 @@
 package cz.dostalma.monolithicshop.controller;
 
+import cz.dostalma.monolithicshop.facade.ProductFacade;
 import cz.dostalma.monolithicshop.model.Product;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +13,10 @@ import java.util.List;
 @RestController
 public class ProductApiController {
 
-    private Logger logger = Logger.getLogger(ProductController.class);
+    private Logger logger = Logger.getLogger(ProductApiController.class);
+
+    @Autowired
+    protected ProductFacade productFacade;
 
     /**
      * GER request to return a list of products
@@ -21,17 +26,7 @@ public class ProductApiController {
     @RequestMapping(value = "/api/products", method = RequestMethod.GET)
     public List<Product> findAll() {
         logger.info("Request to retrieve all products");
-
-        // DEBUG test products -- to be replaced
-        List<Product> list = new ArrayList<>();
-        Product product = new Product.ProductBuilder()
-                .withId(1l)
-                .withName("Apple")
-                .withPrice(3.99)
-                .build();
-        list.add(product);
-
-        return list;
+        return productFacade.getAllProducts();
     }
 
     /**
@@ -43,9 +38,7 @@ public class ProductApiController {
     @GetMapping(value = "/{id}")
     public Product findById(@PathVariable("id") Long id) {
         logger.info("Request to retrieve a product with id: " + id);
-        Product product = new Product();
-
-        return product;
+        return productFacade.getProductById(id);
     }
 
     /**
@@ -58,8 +51,7 @@ public class ProductApiController {
     @ResponseStatus(HttpStatus.CREATED)
     public Long create(@RequestBody Product product) {
         logger.info("Request to create an product: " + product.toString());
-
-        return 1l;
+        return productFacade.createProduct(product);
     }
 
 
@@ -73,7 +65,8 @@ public class ProductApiController {
     @ResponseStatus(HttpStatus.OK)
     public void update(@PathVariable("id") Long id, @RequestBody Product product) {
         logger.info("Request to update an product: " + product.toString() + "with id: " + id);
-
+        product.setId(id);
+        productFacade.updateProduct(product);
     }
 
     /**
@@ -85,6 +78,6 @@ public class ProductApiController {
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable("id") Long id) {
         logger.info("Request to delete a product with id: " + id);
-
+        productFacade.deleteProduct(productFacade.getProductById(id));
     }
 }

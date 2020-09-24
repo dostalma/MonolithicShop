@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title th:text="#{welcome.message}">Monolithic shop welcome page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../../../resources/css/styles.css" rel="stylesheet" m/>
+    <script src="../../../resources/js/jquery.min.js" ></script>
+    <script src="../../../resources/js/bootstrap.min.js" ></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">&nbsp;</div>
+<div class="container">
+
+    <h2 th:text="#{welcome.message}" />
+    <p>xxx</p>
+    <p>${{pageContext.request.contextPath}}</p>
+
+</div>
+</body>
+</html>
